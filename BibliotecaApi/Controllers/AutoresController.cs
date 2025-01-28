@@ -14,14 +14,16 @@ namespace BibliotecaApi.Controllers
         {
             _context = context;
         }
-        [HttpGet]
+
+        [HttpGet("/listado-de-autores")] // no es necesario usar la ruta del controlador api/autores
+        [HttpGet] //pueden existir 2 rutas para una accion 
         public async Task<IEnumerable<Autor>> Get() 
         {
             return await this._context.Autores.ToListAsync();
         }
 
-        [HttpGet("{id:int}")] //api/autores/1
-        public async Task<ActionResult<Autor>> Get(int id) 
+        [HttpGet("{id:int}")] //api/autores/1?incluirLibros  (el fromquery es opcional ), tambien puedo usar [FromHeader]
+        public async Task<ActionResult<Autor>> Get(int id,[FromQuery] bool incluirLibros) 
         {
             var autor = await this._context.Autores
                                    .Include(a => a.Libros)
@@ -34,7 +36,34 @@ namespace BibliotecaApi.Controllers
             return autor;
         }
 
-        [HttpPost]
+        [HttpGet("{nombre:alpha}")] //api/autores/nombreAutor
+        public async Task<ActionResult<Autor>> Get(string nombre)
+        {
+            var autor = await this._context.Autores
+                                   .Include(a => a.Libros)
+                                   .FirstOrDefaultAsync(x => x.Nombre.Contains(nombre));
+
+            if (autor is null)
+            {
+                return NotFound();
+            }
+
+            return autor;
+        }
+
+        [HttpGet("primero")] //api/autores/primero
+        public async Task<Autor> GetPrimerAutor() 
+        {
+            return await this._context.Autores.FirstAsync();
+        }
+
+        //[HttpGet("{parametro1}/{parametro2?}")] //la ? indica que el parametro es opcional 
+        //public ActionResult Get(string parametro1, string? parametro2) 
+        //{
+        //    return Ok(new { parametro1, parametro2});
+        //}
+
+        [HttpPost]                //opcional [FromBody] Autor autor 
         public async Task<ActionResult> Post(Autor autor) 
         {
             this._context.Add(autor);
