@@ -58,5 +58,12 @@ namespace BibliotecaApi.Controllers
             return repositorioValores.obtenerValores();
         }
 
+        [HttpPost]
+        public IActionResult Post(Valor valor) 
+        {
+            repositorioValores.InsertarValor(valor);
+            return Ok();
+        } 
+
     }
 }

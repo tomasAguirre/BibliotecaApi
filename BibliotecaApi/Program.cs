@@ -18,7 +18,7 @@ builder.Services.AddControllers().AddJsonOptions(opciones =>
 builder.Services.AddDbContext<ApplicationDbContext>(opciones =>     
                     opciones.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddTransient<IRepositorioValores, RepositorioValores>();
+builder.Services.AddSingleton<IRepositorioValores, RepositorioValoresOracle>();
 
 var app = builder.Build();
 

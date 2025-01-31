@@ -4,6 +4,11 @@ namespace BibliotecaApi
 {
     public class RepositorioValores : IRepositorioValores
     {
+        public void InsertarValor(Valor valor)
+        {
+            throw new NotImplementedException();
+        }
+
         public IEnumerable<Valor> obtenerValores() 
         {
             return new List<Valor>
