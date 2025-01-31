@@ -10,15 +10,25 @@ namespace BibliotecaApi.Controllers
     public class AutoresController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
-        public AutoresController(ApplicationDbContext context)
+
+        public ILogger<AutoresController> Logger { get; }
+
+        public AutoresController(ApplicationDbContext context, ILogger<AutoresController> logger)
         {
             _context = context;
+            Logger = logger;
         }
 
         [HttpGet("/listado-de-autores")] // no es necesario usar la ruta del controlador api/autores
         [HttpGet] //pueden existir 2 rutas para una accion 
         public async Task<IEnumerable<Autor>> Get() 
         {
+            Logger.LogTrace("Obteniendo el listado de autores : ");
+            Logger.LogDebug("Obteniendo el listado de autores : ");
+            Logger.LogInformation("Obteniendo el listado de autores : ");
+            Logger.LogWarning("Obteniendo el listado de autores :");
+            Logger.LogError("Obteniendo el listado de autores :");
+            Logger.LogCritical("Obteniendo el listado de autores :");
             return await this._context.Autores.ToListAsync();
         }
 
