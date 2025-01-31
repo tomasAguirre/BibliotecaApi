@@ -25,28 +25,31 @@ var app = builder.Build();
 
 // area de middlewares 
 
-app.Use(async (contexto, next) =>
-{
-    //Viene la peticion 
-    var logger = contexto.RequestServices.GetRequiredService<ILogger<Program>>();
-    logger.LogInformation($"Peticion {contexto.Request.Method} {contexto.Request.Path}");
-    await next.Invoke();
-    //Se va la respuesta 
-    logger.LogInformation($"Respuesta {contexto.Response.StatusCode}");
-});
+//app.Use(async (contexto, next) =>
+//{
+//    //Viene la peticion 
+//    var logger = contexto.RequestServices.GetRequiredService<ILogger<Program>>();
+//    logger.LogInformation($"Peticion {contexto.Request.Method} {contexto.Request.Path}");
+//    await next.Invoke();
+//    //Se va la respuesta 
+//    logger.LogInformation($"Respuesta {contexto.Response.StatusCode}");
+//});
 
-app.Use(async (contexto, next) =>
-{
-    if (contexto.Request.Path == "/bloqueado")
-    {
-        contexto.Response.StatusCode = 403;
-        await contexto.Response.WriteAsync("Acceso denegado ");
-    }
-    else 
-    {
-        await next.Invoke();
-    }
-});
+app.UseLogueaPeticion();
+
+//app.Use(async (contexto, next) =>
+//{
+//    if (contexto.Request.Path == "/bloqueado")
+//    {
+//        contexto.Response.StatusCode = 403;
+//        await contexto.Response.WriteAsync("Acceso denegado ");
+//    }
+//    else 
+//    {
+//        await next.Invoke();
+//    }
+//});
+app.UseBloqueaPeticion();
 
 //aca indicamos que manejaremos las peticiones con controladores
 app.MapControllers();
