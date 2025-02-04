@@ -18,7 +18,7 @@ namespace BibliotecaApi.Entidades
 
         public int Id { get; set; }
         [Required(ErrorMessage = "El campo {0} es requerido")] //{0} es un place holder que sustituye el valor con el nombre del campo
-        [StringLength(20, ErrorMessage = "El campo {0} debe tener 20 caracteres o menos")]
+        [StringLength(150, ErrorMessage = "El campo {0} debe tener 20 caracteres o menos")]
         //[PrimeraLetraMayuscula]
         public required string  Nombre { get; set; }
 

@@ -32,7 +32,7 @@ namespace BibliotecaApi.Controllers
             return await this._context.Autores.ToListAsync();
         }
 
-        [HttpGet("{id:int}")] //api/autores/1?incluirLibros  (el fromquery es opcional ), tambien puedo usar [FromHeader]
+        [HttpGet("{id:int}", Name ="ObtenerAutor")] //api/autores/1?incluirLibros  (el fromquery es opcional ), tambien puedo usar [FromHeader]
         public async Task<ActionResult<Autor>> Get(int id,[FromQuery] bool incluirLibros) 
         {
             var autor = await this._context.Autores
@@ -78,7 +78,8 @@ namespace BibliotecaApi.Controllers
         {
             this._context.Add(autor);
             await this._context.SaveChangesAsync();
-            return Ok();
+            return CreatedAtRoute("ObtenerAutor", new {Id=autor.Id }, autor);
+            //return Ok();
         }
 
         [HttpPut("{id:int}")]
