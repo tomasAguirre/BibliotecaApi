@@ -10,6 +10,8 @@ builder.Services.AddTransient<ServicioTransient>();
 builder.Services.AddScoped<ServicioScoped>();
 builder.Services.AddSingleton<ServicioSingleton>();
 
+builder.Services.AddAutoMapper(typeof(Program));
+
 builder.Services.AddControllers().AddJsonOptions(opciones => 
                                     opciones.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles); //agregamos la configuracion de controladores
                                //opciones.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles lo utilizo ...
