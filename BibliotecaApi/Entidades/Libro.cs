@@ -12,6 +12,8 @@ namespace BibliotecaApi.Entidades
         [StringLength(150, ErrorMessage ="El titulo de {0} tiene que tener 150 caracteres")]
         public required string Titulo { get; set; }
         public int AutorId { get; set; }
-        public Autor? Autor { get; set; } 
+        public Autor? Autor { get; set; }
+
+        public List<Comentario> Comentarios { get; set; } = []; //Listado de comentarios de los libros 
     }
 }

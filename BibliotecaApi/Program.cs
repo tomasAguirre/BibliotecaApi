@@ -12,10 +12,12 @@ builder.Services.AddSingleton<ServicioSingleton>();
 
 builder.Services.AddAutoMapper(typeof(Program));
 
-builder.Services.AddControllers().AddJsonOptions(opciones => 
-                                    opciones.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles); //agregamos la configuracion de controladores
-                               //opciones.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles lo utilizo ...
-                               //para evitar en ciclo infinito entre las entidades ya que un autor tiene libros y libros tiene autorres ...
+//builder.Services.AddControllers().AddJsonOptions(opciones => 
+//                                    opciones.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles); //agregamos la configuracion de controladores
+//                               //opciones.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles lo utilizo ...
+//                               //para evitar en ciclo infinito entre las entidades ya que un autor tiene libros y libros tiene autorres ...
+
+builder.Services.AddControllers().AddNewtonsoftJson();
 
 builder.Services.AddDbContext<ApplicationDbContext>(opciones =>     
                     opciones.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));

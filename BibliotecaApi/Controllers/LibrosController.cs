@@ -30,7 +30,7 @@ namespace BibliotecaApi.Controllers
         }
 
         [HttpGet("{id:int}", Name ="ObtenerLibro")]
-        public async Task<ActionResult<LibroDTO>> Get(int id) 
+        public async Task<ActionResult<LibroConAutorDTO>> Get(int id) 
         {
             var libro = await this.context.Libros
                                     .Include(x=> x.Autor)
@@ -39,7 +39,7 @@ namespace BibliotecaApi.Controllers
             {
                 return NotFound();
             }
-            var libroDTO = this.Mapper.Map<LibroDTO>(libro);
+            var libroDTO = this.Mapper.Map<LibroConAutorDTO>(libro);
             return libroDTO;
         }
 
@@ -77,7 +77,7 @@ namespace BibliotecaApi.Controllers
             this.context.Update(libro);
             await this.context.SaveChangesAsync();
 
-            return Ok();
+            return NoContent(); //actualizar por estandar se retorna esto un 204
         }
 
         [HttpDelete("{id:int}")]
@@ -89,7 +89,7 @@ namespace BibliotecaApi.Controllers
             {
                 return NotFound();
             }
-            return Ok();
+            return NoContent(); //eliminar por estandar se retorna esto un 204
         }
     }
 }

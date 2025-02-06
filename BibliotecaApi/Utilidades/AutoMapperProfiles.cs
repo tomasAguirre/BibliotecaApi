@@ -9,13 +9,24 @@ namespace BibliotecaApi.Utilidades
         public AutoMapperProfiles()
         {
             CreateMap<Autor, AutorDTO>()
-                .ForMember(dto => dto.NombreCompleto, config => config.MapFrom(autor => $"{autor.Nombres} {autor.Apellidos}"));
+                .ForMember(dto => dto.NombreCompleto, config => config.MapFrom(autor => mapearNombreApellidoAutor(autor)));
+
+            CreateMap<Autor, AutorConLibrosDTO>()
+    .ForMember(dto => dto.NombreCompleto, config => config.MapFrom(autor => mapearNombreApellidoAutor(autor)));
 
             CreateMap<AutorCreacionDTO, Autor>();
+
+            CreateMap<Autor, AutorPatchDTO>().ReverseMap();
 
             CreateMap<Libro, LibroDTO>();
 
             CreateMap<LibroCreacionDTO, Libro>();
+
+            CreateMap<Libro, LibroConAutorDTO>().ForMember(dto => dto.AutorNombre, config =>
+            config.MapFrom(ent => mapearNombreApellidoAutor(ent.Autor!)));
+
         }
+
+        private string mapearNombreApellidoAutor(Autor autor) => $"{autor.Nombres} {autor.Apellidos}";
     }
 }

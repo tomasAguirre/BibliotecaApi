@@ -2,6 +2,7 @@
 using BibliotecaApi.Datos;
 using BibliotecaApi.DTOs;
 using BibliotecaApi.Entidades;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -41,7 +42,7 @@ namespace BibliotecaApi.Controllers
         }
 
         [HttpGet("{id:int}", Name ="ObtenerAutor")] //api/autores/1?incluirLibros  (el fromquery es opcional ), tambien puedo usar [FromHeader]
-        public async Task<ActionResult<AutorDTO>> Get(int id,[FromQuery] bool incluirLibros) 
+        public async Task<ActionResult<AutorConLibrosDTO>> Get(int id,[FromQuery] bool incluirLibros) 
         {
             var autor = await this._context.Autores
                                    .Include(a => a.Libros)
@@ -51,7 +52,7 @@ namespace BibliotecaApi.Controllers
                 return NotFound();
             }
 
-            var AutorDTO = mapper.Map<AutorDTO>(autor);
+            var AutorDTO = mapper.Map<AutorConLibrosDTO>(autor);
 
             return AutorDTO;
         }
@@ -106,7 +107,32 @@ namespace BibliotecaApi.Controllers
             this._context.Update(autor);
             await this._context.SaveChangesAsync();
 
-            return Ok();
+            return NoContent(); //actualizar por estandar se retorna esto un 204
+        }
+
+        [HttpPatch("{id:int}")]
+        public async Task<ActionResult> Patch(int id, JsonPatchDocument<AutorPatchDTO> autorDoc)
+        {
+            if (autorDoc is null)
+            {
+                return BadRequest();
+            }
+            var autorDB = await this._context.Autores.FirstOrDefaultAsync(x => x.Id == id);
+            if (autorDB is null)
+            {
+                return NotFound();
+            }
+            var autorPatchDTO = mapper.Map<AutorPatchDTO>(autorDB);
+            autorDoc.ApplyTo(autorPatchDTO, ModelState);
+            var esValido = TryValidateModel(autorPatchDTO);
+
+            if (!esValido) 
+            {
+                return ValidationProblem();
+            }
+            mapper.Map(autorPatchDTO, autorDB);
+            await this._context.SaveChangesAsync();
+            return NoContent();
         }
 
         [HttpDelete("{id:int}")]
@@ -118,7 +144,7 @@ namespace BibliotecaApi.Controllers
             {
                 return NotFound();
             }
-            return Ok();
+            return NoContent(); //eliminar por estandar se retorna esto un 204
         }
     }
 }
