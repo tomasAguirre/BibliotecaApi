@@ -25,6 +25,10 @@ namespace BibliotecaApi.Utilidades
             CreateMap<Libro, LibroConAutorDTO>().ForMember(dto => dto.AutorNombre, config =>
             config.MapFrom(ent => mapearNombreApellidoAutor(ent.Autor!)));
 
+            CreateMap<ComentarioCreacionDTO, Comentario>();
+            CreateMap<Comentario, ComentarioDTO>();
+            CreateMap<ComentarioPatchDTO, Comentario>().ReverseMap();
+
         }
 
         private string mapearNombreApellidoAutor(Autor autor) => $"{autor.Nombres} {autor.Apellidos}";
